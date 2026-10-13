@@ -1,0 +1,11 @@
+[package]
+name = "netmesh-ring-shim"
+version = "0.1.0"
+edition = "2021"
+description = "The slice of ring 0.16's API boringtun::noise uses (ChaCha20-Poly1305 AEAD, constant-time compare), in pure Rust for wasm32"
+license = "Apache-2.0"
+publish = false
+
+[dependencies]
+chacha20poly1305 = "0.10"
+subtle = "2"

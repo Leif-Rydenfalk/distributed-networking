@@ -1,0 +1,21 @@
+name: test
+on:
+  push:
+  pull_request:
+jobs:
+  cargo-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: wireguard tools
+        run: sudo apt-get update -q && sudo apt-get install -yq wireguard-tools nftables
+      - name: cargo test (root crate)
+        run: cargo test --all-targets 2>&1 | tee test.log
+      - name: cargo test (netmesh-client)
+        run: cd crates/netmesh-client && cargo test 2>&1 | tee ../../client.log
+      - name: summary
+        if: always()
+        run: grep -h "^test result" test.log client.log || true

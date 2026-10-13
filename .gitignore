@@ -1,0 +1,6 @@
+/target
+**/target/
+*.key
+*.secret
+state/
+.env

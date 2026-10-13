@@ -1,0 +1,22 @@
+distributed-networking
+Copyright 2026 ce-net
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This product includes third-party software:
+
+boringtun 0.6.0 (crates/netmesh-client/vendor/boringtun)
+  Copyright (c) 2019 Cloudflare, Inc. All rights reserved.
+  Licensed under the BSD 3-Clause License; the full text is in
+  crates/netmesh-client/vendor/boringtun/LICENSE.md.
+  Vendored with small wasm32-only patches described in
+  crates/netmesh-client/vendor/boringtun/PATCH.md.
+  https://github.com/cloudflare/boringtun
+
+openraft 0.9 (dependency, fetched from crates.io)
+  Copyright the openraft authors.
+  Licensed under the MIT License or the Apache License, Version 2.0, at your option.
+  https://github.com/datafuselabs/openraft
+
+Other dependencies are fetched from crates.io under their own licenses; see Cargo.lock
+and each crate's metadata.
