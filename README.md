@@ -279,7 +279,19 @@ The wasm build of the client is tested with `wasm-bindgen-test-runner`; see the 
 
 ## Benchmarks
 
-See [BENCHMARKS.md](BENCHMARKS.md).
+Measured against Tailscale on the same machines in the same minute (2026-10-13; full method, every number and what was
+not measured in [BENCHMARKS.md](BENCHMARKS.md)). Long-haul pair, Europe server to East Asia laptop, ~245 ms RTT; the
+mesh ran over its relay leg, Tailscale over direct UDP:
+
+| metric | distributed-networking | Tailscale |
+|---|---|---|
+| TCP connect p99 | 334-603 ms, 0/150 failed | 1255-1318 ms, 2/150 failed |
+| ping loss | 1/300 | 13/300 |
+| throughput into the East Asia site (median of 3) | 268 kB/s | 100 kB/s |
+| throughput out of it (median of 3) | 482 kB/s | 628 kB/s |
+
+Where we lose today: two machines on the same LAN. Tailscale finds the LAN path (7.6 ms, 8.5 MB/s), while the mesh
+went through the relay (46 ms, 2.7 MB/s). LAN endpoint discovery is the fix in progress.
 
 ## License
 
