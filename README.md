@@ -290,8 +290,8 @@ mesh ran over its relay leg, Tailscale over direct UDP:
 | throughput into the East Asia site (median of 3) | 268 kB/s | 100 kB/s |
 | throughput out of it (median of 3) | 482 kB/s | 628 kB/s |
 
-Where we lose today: two machines on the same LAN. Tailscale finds the LAN path (7.6 ms, 8.5 MB/s), while the mesh
-went through the relay (46 ms, 2.7 MB/s). LAN endpoint discovery is the fix in progress.
+Same LAN, after LAN endpoint discovery: mesh 7.9 ms ping and 8.5 MB/s one way, level with Tailscale (7.8 ms, 7.6 MB/s);
+the other direction is still 4.4x slower than Tailscale and is being worked on.
 
 ## License
 

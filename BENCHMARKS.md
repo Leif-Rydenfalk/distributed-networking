@@ -143,3 +143,26 @@ start, not link capacity.
   has the earlier soak.
 - **Tailscale control-plane failover**: hosted by Tailscale, so it cannot be killed from here.
 - Side note: one 2-connect debug probe hit the laptop's mesh address during round 1's Tailscale connect phase.
+
+## Rerun after LAN endpoints (2026-10-13, 19:57-20:08 UTC)
+
+Commit 47a413f went live on both Macs: `netmesh up` registers private LAN addresses, and `netmesh lan-pick` switches a
+peer to its LAN endpoint after a handshake within 1 s. Same runner, same 2 MB transfers. The laptop's root start job has
+not rerun yet (it runs at boot), so only the desktop side picked its LAN endpoint.
+
+| pair | metric | net.mesh | Tailscale |
+|---|---|---|---|
+| laptop <-> desktop (same LAN) | TCP connect p50 / p99 | 7.9 / 71 ms (50/50) | 9.5 / 118 ms (50/50) |
+| laptop <-> desktop | connect + first byte p50 / p99 | 18.3 / 124 ms | 19.3 / 130 ms |
+| laptop <-> desktop | ping p50 / p99, loss | 7.9 / 96 ms, 0 % | 7.8 / 101 ms, 0 % |
+| laptop <-> desktop | laptop -> desktop | 8549 kB/s | 7576 kB/s |
+| laptop <-> desktop | desktop -> laptop | 1567 kB/s | 6840 kB/s |
+| Europe server <-> East Asia laptop (long haul, relay leg) | TCP connect p50 / p99 | 246 / 494 ms (50/50) | 248 / 356 ms (50/50) |
+| Europe server <-> East Asia laptop | ping p50 / p99, loss | 238 / 572 ms, 0 % | 249 / 511 ms, 4 % |
+| Europe server <-> East Asia laptop | laptop -> server | 542 kB/s | 735 kB/s |
+| Europe server <-> East Asia laptop | server -> laptop | 514 kB/s | 125 kB/s |
+
+Before the fix the same-LAN pair measured 46 ms ping p50 and 2677 / 884 kB/s on the mesh. Now the mesh matches Tailscale
+on latency and beats it laptop -> desktop. Desktop -> laptop is still 4.4x slower; not yet explained (one round, the
+laptop side still on its old endpoint). Long haul: the mesh keeps winning into the East Asia site (514 vs 125 kB/s) and
+on loss, and still loses out of it (542 vs 735 kB/s).
